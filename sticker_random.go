@@ -6,7 +6,7 @@ import (
 )
 
 // Random returns a random sticker GIF
-func (c *stickerClient) Random(query RandomReq) (*RandomGIF, error) {
+func (c *StickerClient) Random(query RandomReq) (*RandomGIF, error) {
 	reqURL := c.baseURL.ResolveReference(randomPath)
 	q := query.toValues()
 	q.Add("api_key", c.apiKey)

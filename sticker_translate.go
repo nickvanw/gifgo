@@ -6,7 +6,7 @@ import (
 )
 
 // Translate runs giphy's sticker "translate" on a term. ~magic~
-func (c *stickerClient) Translate(query TranslateReq) (*SingleGIF, error) {
+func (c *StickerClient) Translate(query TranslateReq) (*SingleGIF, error) {
 	reqURL := c.baseURL.ResolveReference(translatePath)
 	q := query.toValues()
 	q.Add("api_key", c.apiKey)

@@ -6,7 +6,7 @@ import (
 )
 
 // Trending returns the current trending sticker GIFs
-func (c *stickerClient) Trending(query TrendingReq) (*MultipleGIF, error) {
+func (c *StickerClient) Trending(query TrendingReq) (*MultipleGIF, error) {
 	reqURL := c.baseURL.ResolveReference(trendingPath)
 	q := query.toValues()
 	q.Add("api_key", c.apiKey)

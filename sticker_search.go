@@ -6,7 +6,7 @@ import (
 )
 
 // Search searches for a sticker GIF with the specified params
-func (c *stickerClient) Search(query SearchReq) (*MultipleGIF, error) {
+func (c *StickerClient) Search(query SearchReq) (*MultipleGIF, error) {
 	reqURL := c.baseURL.ResolveReference(searchPath)
 	q := query.toValues()
 	q.Add("api_key", c.apiKey)

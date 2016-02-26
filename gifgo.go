@@ -67,7 +67,7 @@ func New(confs ...OptFunc) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	stick := stickerClient{client: c.client,
+	stick := StickerClient{client: c.client,
 		baseURL: sr,
 		apiHost: c.apiHost,
 		apiPath: c.stickersAPIPath,
