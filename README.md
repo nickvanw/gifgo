@@ -13,7 +13,7 @@ Package gifgo implements the GIPHY API in Go
 ## type Client
 ``` go
 type Client struct {
-    Stickers stickerClient
+    Stickers StickerClient
     // contains filtered or unexported fields
 }
 ```
@@ -359,6 +359,22 @@ type SingleGIF struct {
 ```
 SingleGIF represents single GIF return data
 
+
+
+
+
+
+
+
+
+
+
+## type StickerClient
+``` go
+type StickerClient struct {
+    // contains filtered or unexported fields
+}
+```
 
 
 
