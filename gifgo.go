@@ -40,6 +40,20 @@ type Client struct {
 // OptFunc is used to configure optional paramaters
 type OptFunc func(*Client)
 
+// APIKey sets the API key for requests to GIPHY
+func APIKey(key string) OptFunc {
+	return func(c *Client) {
+		c.apiKey = key
+	}
+}
+
+// WithClient sets the HTTP Client used to call GIPHY
+func WithClient(cli *http.Client) OptFunc {
+	return func(c *Client) {
+		c.client = cli
+	}
+}
+
 // New creates an API client with the specified options
 func New(confs ...OptFunc) (*Client, error) {
 	client := http.DefaultClient
@@ -49,11 +63,12 @@ func New(confs ...OptFunc) (*Client, error) {
 	c.apiKey = apiKey
 
 	c.stickersAPIPath = stickersAPIPath
-	c.stickersAPIKey = apiKey
 
 	for _, v := range confs {
 		v(c)
 	}
+
+	c.stickersAPIKey = apiKey
 
 	u := fmt.Sprintf("https://%s/%s", c.apiHost, c.apiPath)
 	ur, err := url.Parse(u)
