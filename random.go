@@ -9,25 +9,7 @@ import (
 // Random returns a random GIF
 func (c *Client) Random(query RandomReq) (*RandomGIF, error) {
 	reqURL := c.baseURL.ResolveReference(randomPath)
-	q := query.toValues()
-	q.Add("api_key", c.apiKey)
-	reqURL.RawQuery = q.Encode()
-
-	req, err := http.NewRequest("GET", reqURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	data := new(RandomGIF)
-	if err := json.NewDecoder(resp.Body).Decode(data); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return random(query, reqURL, c.apiKey, c.client)
 }
 
 // RandomReq contains options for listing a random GIF
@@ -44,4 +26,26 @@ func (s RandomReq) toValues() url.Values {
 		values.Add("rating", string(s.Rating))
 	}
 	return values
+}
+
+func random(query RandomReq, reqURL *url.URL, key string, c *http.Client) (*RandomGIF, error) {
+	q := query.toValues()
+	q.Add("api_key", key)
+	reqURL.RawQuery = q.Encode()
+
+	req, err := http.NewRequest("GET", reqURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	data := new(RandomGIF)
+	if err := json.NewDecoder(resp.Body).Decode(data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }

@@ -9,24 +9,7 @@ import (
 // Search searches for a GIF with the specified params
 func (c *Client) Search(query SearchReq) (*MultipleGIF, error) {
 	reqURL := c.baseURL.ResolveReference(searchPath)
-	q := query.toValues()
-	q.Add("api_key", c.apiKey)
-	reqURL.RawQuery = q.Encode()
-
-	req, err := http.NewRequest("GET", reqURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	data := new(MultipleGIF)
-	if err := json.NewDecoder(resp.Body).Decode(data); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return search(query, reqURL, c.apiKey, c.client)
 }
 
 // SearchReq contains paramaters for a GIF search
@@ -50,4 +33,25 @@ func (s SearchReq) toValues() url.Values {
 		values.Add("rating", s.Rating)
 	}
 	return values
+}
+
+func search(query SearchReq, reqURL *url.URL, key string, client *http.Client) (*MultipleGIF, error) {
+	q := query.toValues()
+	q.Add("api_key", key)
+	reqURL.RawQuery = q.Encode()
+
+	req, err := http.NewRequest("GET", reqURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	data := new(MultipleGIF)
+	if err := json.NewDecoder(resp.Body).Decode(data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }
